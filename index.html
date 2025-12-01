@@ -3,19 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Download Exambro - Verification</title>
+    <title>Exambro Secure Access</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Animasi Background Gradient */
+        /* --- Background Animation --- */
         body {
-            background: linear-gradient(-45deg, #141e30, #243b55, #4b6cb7, #182848);
+            background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e);
             background-size: 400% 400%;
             animation: gradient 15s ease infinite;
             height: 100vh;
             overflow: hidden;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            user-select: none; /* Mencegah seleksi teks saat geser */
+            font-family: 'Segoe UI', sans-serif;
+            user-select: none;
+            color: white;
         }
 
         @keyframes gradient {
@@ -24,285 +25,331 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* Glassmorphism Card */
+        /* --- Glassmorphism --- */
         .glass-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
         }
 
-        /* Center Slider Styles */
+        /* --- Slider Styles --- */
         #slider-container {
             position: relative;
             width: 100%;
             height: 64px;
-            background: rgba(0, 0, 0, 0.4);
+            background: rgba(0, 0, 0, 0.3);
             border-radius: 32px;
             display: flex;
             align-items: center;
-            justify-content: space-between; /* Space text to sides */
+            justify-content: space-between;
             padding: 0 20px;
-            border: 2px solid rgba(255,255,255,0.1);
-            box-sizing: border-box;
+            border: 1px solid rgba(255,255,255,0.1);
             overflow: hidden;
+            box-sizing: border-box;
         }
 
-        /* Labels Kiri & Kanan */
         .slider-label {
-            font-weight: bold;
-            font-size: 0.85rem;
-            color: rgba(255, 255, 255, 0.5);
+            font-weight: 700;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.3);
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
             z-index: 1;
-            transition: opacity 0.3s;
         }
 
-        /* The Handle (Tombol Geser) */
         #slider-handle {
             position: absolute;
-            left: 50%; /* Start in middle */
+            left: 50%;
             top: 50%;
-            transform: translate(-50%, -50%); /* Center perfectly */
-            width: 56px;
-            height: 56px;
+            transform: translate(-50%, -50%);
+            width: 54px;
+            height: 54px;
             background: white;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: grab;
-            box-shadow: 0 0 15px rgba(0,0,0,0.3);
+            box-shadow: 0 0 20px rgba(0,0,0,0.4);
             z-index: 10;
-            transition: background 0.3s; /* Smooth color change */
-            /* Note: 'left' is handled by JS during drag, 'transform' centers it */
-        }
-
-        #slider-handle:active {
-            cursor: grabbing;
-            transform: translate(-50%, -50%) scale(0.95);
+            transition: background 0.2s;
         }
 
         #slider-handle i {
-            color: #243b55;
+            color: #302b63;
             font-size: 1.2rem;
-            transition: transform 0.3s;
+            transition: all 0.3s;
         }
 
-        /* Confetti */
+        /* --- Password Input Styles --- */
+        .pass-input {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            text-align: center;
+            letter-spacing: 4px;
+            font-size: 1.5rem;
+            transition: all 0.3s;
+        }
+        .pass-input:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        /* Shake Animation for Wrong Password */
+        .shake {
+            animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+            border-color: #ff4757 !important;
+        }
+
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+
+        /* Utils */
+        .hidden { display: none; }
+        .fade-in { animation: fadeIn 0.5s forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
         #confetti-canvas {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             pointer-events: none;
             z-index: 50;
         }
-
-        /* Animation for appearance */
-        .fade-in-up {
-            animation: fadeInUp 0.5s forwards;
-        }
-        
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
     </style>
 </head>
-<body class="flex items-center justify-center">
+<body class="flex items-center justify-center p-4">
 
     <canvas id="confetti-canvas"></canvas>
 
-    <div class="glass-card p-8 w-full max-w-md mx-4 text-center relative z-20">
-        <!-- Logo Area -->
+    <div class="glass-card w-full max-w-sm p-8 text-center relative z-20">
+        
+        <!-- Header -->
         <div class="mb-8">
-            <div class="w-20 h-20 mx-auto bg-gradient-to-tr from-blue-400 to-purple-500 rounded-2xl flex items-center justify-center shadow-lg mb-4 rotate-3 hover:rotate-0 transition-all duration-300">
-                <i class="fa-solid fa-file-shield text-4xl text-white"></i>
+            <div class="w-20 h-20 mx-auto bg-white/10 rounded-full flex items-center justify-center mb-4 border border-white/20">
+                <i class="fa-solid fa-user-secret text-4xl text-white/90"></i>
             </div>
-            <h1 class="text-2xl font-bold text-white tracking-wide">Exambro Secure</h1>
-            <p class="text-blue-200 text-xs mt-1 font-mono">VERSI 4.0.2 // BUILD 2024</p>
+            <h1 class="text-2xl font-bold tracking-wider">SECURE ACCESS</h1>
+            <p class="text-white/40 text-xs mt-1">Exambro Authentication</p>
         </div>
 
-        <!-- Question -->
-        <div id="question-area" class="mb-2">
-            <h2 class="text-white font-semibold text-lg mb-6">Apakah Lana Ganteng?</h2>
+        <!-- STAGE 1: SLIDER VERIFICATION -->
+        <div id="stage-slider" class="fade-in">
+            <h2 class="text-lg font-medium mb-6">Apakah Lanadev Baik?</h2>
             
-            <!-- The Slider -->
             <div id="slider-container">
-                <span class="slider-label text-red-400"><i class="fa-solid fa-xmark mr-1"></i> GAK</span>
+                <span class="slider-label text-red-500/50">GAK</span>
                 
                 <div id="slider-handle">
                     <i class="fa-solid fa-arrows-left-right"></i>
                 </div>
                 
-                <span class="slider-label text-green-400">IYA <i class="fa-solid fa-check ml-1"></i></span>
+                <span class="slider-label text-green-500/50">IYA</span>
             </div>
-            <p id="hint-text" class="text-white/40 text-xs mt-3">Geser ke jawaban yang benar</p>
+            <p id="slider-hint" class="text-white/20 text-[10px] mt-4 uppercase tracking-widest">Geser untuk konfirmasi</p>
         </div>
 
-        <!-- Download Section (Hidden Initially) -->
-        <div id="download-area" class="hidden mt-4">
-            <div class="bg-green-500/10 border border-green-500/30 rounded-xl p-4 mb-4 fade-in-up">
-                <div class="flex items-center justify-center gap-2 text-green-300 font-bold mb-1">
-                    <i class="fa-solid fa-shield-halved"></i> AKSES DITERIMA
-                </div>
-                <p class="text-green-100/70 text-xs">Jawaban Anda benar. Lana Valid Ganteng.</p>
-            </div>
+        <!-- STAGE 2: PASSWORD VERIFICATION -->
+        <div id="stage-password" class="hidden">
+            <h2 class="text-lg font-medium mb-4"><i class="fa-solid fa-lock mr-2 text-xs"></i>Masukkan Kode</h2>
             
-            <a href="base.apk" download class="fade-in-up block w-full bg-white hover:bg-blue-50 text-blue-900 font-bold py-4 rounded-xl shadow-lg transition transform hover:-translate-y-1 active:scale-95 flex items-center justify-center gap-3">
-                <i class="fa-solid fa-cloud-arrow-down text-xl"></i>
-                DOWNLOAD APLIKASI
+            <div class="relative mb-4">
+                <input type="password" id="password-input" maxlength="6" class="pass-input w-full rounded-xl py-3 px-4 placeholder-white/10" placeholder="******">
+            </div>
+
+            <button onclick="checkPassword()" class="w-full bg-white text-gray-900 font-bold py-3 rounded-xl hover:bg-gray-200 transition active:scale-95">
+                VERIFIKASI
+            </button>
+        </div>
+
+        <!-- STAGE 3: DOWNLOAD -->
+        <div id="stage-download" class="hidden">
+            <div class="bg-green-500/20 border border-green-500/30 rounded-xl p-4 mb-6">
+                <i class="fa-solid fa-circle-check text-green-400 text-3xl mb-2"></i>
+                <h3 class="font-bold text-green-100">Akses Diterima</h3>
+            </div>
+
+            <a href="base.apk" id="dl-btn" download class="block w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold py-4 rounded-xl shadow-lg transform hover:-translate-y-1 transition flex items-center justify-center gap-2">
+                <i class="fa-solid fa-download animate-bounce"></i> DOWNLOAD APK
             </a>
-            <button onclick="location.reload()" class="mt-4 text-white/30 text-xs hover:text-white underline">Reset Verifikasi</button>
+            <p class="text-white/30 text-xs mt-4">Download dimulai otomatis...</p>
         </div>
 
     </div>
 
     <script>
-        const container = document.getElementById('slider-container');
+        // --- LOGIC VARIABLES ---
+        const sliderContainer = document.getElementById('slider-container');
         const handle = document.getElementById('slider-handle');
         const handleIcon = handle.querySelector('i');
-        const questionArea = document.getElementById('question-area');
-        const downloadArea = document.getElementById('download-area');
-        const hintText = document.getElementById('hint-text');
+        const stageSlider = document.getElementById('stage-slider');
+        const stagePassword = document.getElementById('stage-password');
+        const stageDownload = document.getElementById('stage-download');
+        const passwordInput = document.getElementById('password-input');
+        const sliderHint = document.getElementById('slider-hint');
 
+        // --- SLIDER LOGIC ---
         let isDragging = false;
-        let startX, startLeft;
+        let startX;
         
-        // Dimensions
-        let containerWidth, handleWidth, maxDist;
-
-        function initDimensions() {
-            containerWidth = container.offsetWidth;
-            handleWidth = handle.offsetWidth;
-            // Jarak maksimal dari tengah ke pinggir (dikurangi sedikit padding)
-            maxDist = (containerWidth / 2) - (handleWidth / 2) - 4;
+        function initSlider() {
+            handle.addEventListener('mousedown', startDrag);
+            handle.addEventListener('touchstart', (e) => startDrag(e.touches[0]));
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('touchmove', (e) => drag(e.touches[0]));
+            document.addEventListener('mouseup', endDrag);
+            document.addEventListener('touchend', endDrag);
         }
 
-        // Init
-        initDimensions();
-        window.addEventListener('resize', initDimensions);
-
-        // Mouse Events
-        handle.addEventListener('mousedown', startDrag);
-        document.addEventListener('mousemove', drag);
-        document.addEventListener('mouseup', endDrag);
-
-        // Touch Events
-        handle.addEventListener('touchstart', (e) => startDrag(e.touches[0]));
-        document.addEventListener('touchmove', (e) => drag(e.touches[0]));
-        document.addEventListener('touchend', endDrag);
-
         function startDrag(e) {
-            if (handle.classList.contains('locked')) return; // Stop if already verified
-            
             isDragging = true;
             startX = e.clientX;
-            handle.style.transition = 'none'; // Remove transition for instant drag
+            handle.style.transition = 'none';
         }
 
         function drag(e) {
             if (!isDragging) return;
             
+            const containerW = sliderContainer.offsetWidth;
+            const handleW = handle.offsetWidth;
+            const maxDist = (containerW / 2) - (handleW / 2) - 5;
+            
+            // Calculate movement relative to center
             let moveX = e.clientX - startX;
-
-            // Limit movement
+            
+            // Clamp movement
             if (moveX > maxDist) moveX = maxDist;
             if (moveX < -maxDist) moveX = -maxDist;
 
-            // Apply movement (TranslateX)
-            // Note: We use translate(-50%, -50%) for centering + translateX(moveX) for movement
+            // Apply transform
             handle.style.transform = `translate(calc(-50% + ${moveX}px), -50%)`;
 
             // Visual feedback
             if (moveX > 0) {
-                // Dragging Right (YES)
-                handle.style.background = `rgba(${255 - (moveX/maxDist)*255}, 255, ${255 - (moveX/maxDist)*255}, 1)`; // White to Greenish logic handled better below
-                container.style.background = `linear-gradient(90deg, rgba(0,0,0,0.4) 50%, rgba(46, 204, 113, ${moveX/maxDist * 0.5}) 100%)`;
-                handleIcon.className = "fa-solid fa-face-smile";
+                // Right (YES)
+                handle.style.background = `rgba(${255 - (moveX/maxDist)*100}, 255, ${255 - (moveX/maxDist)*100}, 1)`;
+                handleIcon.className = "fa-solid fa-thumbs-up";
+                handleIcon.style.color = "#2ecc71";
             } else if (moveX < 0) {
-                // Dragging Left (NO)
-                container.style.background = `linear-gradient(90deg, rgba(231, 76, 60, ${Math.abs(moveX)/maxDist * 0.5}) 0%, rgba(0,0,0,0.4) 50%)`;
-                handleIcon.className = "fa-solid fa-face-frown";
+                // Left (NO)
+                handle.style.background = `rgba(255, ${255 - (Math.abs(moveX)/maxDist)*100}, ${255 - (Math.abs(moveX)/maxDist)*100}, 1)`;
+                handleIcon.className = "fa-solid fa-thumbs-down";
+                handleIcon.style.color = "#e74c3c";
             }
         }
 
         function endDrag(e) {
             if (!isDragging) return;
             isDragging = false;
-            
-            // Re-enable transition for snap back
-            handle.style.transition = 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.3s';
-            container.style.transition = 'background 0.3s';
 
-            // Check position
-            // Calculate final offset based on the last transform or reconstruct from event
-            // Simplified: we track the last intended MoveX implicitly or just grab X from event relative to start
-            // Since `drag` updates the visual, let's just calculate based on where the mouse ended up relative to startX
+            // Determine final position logic
+            const containerW = sliderContainer.offsetWidth;
+            const handleW = handle.offsetWidth;
+            const maxDist = (containerW / 2) - (handleW / 2) - 5;
+            const threshold = maxDist * 0.7; // 70% distance required
             
+            // Get current visual X roughly by recalculating or reading computed style (simplified here using logic)
+            // Since we released, we check the last known move via simple math relative to start
             let finalX = (e.changedTouches ? e.changedTouches[0].clientX : e.clientX) - startX;
-            
-            // Threshold (70% of distance)
-            const threshold = maxDist * 0.7;
+
+            handle.style.transition = 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.3s';
 
             if (finalX > threshold) {
-                // SUKSES (KANAN)
-                verifySuccess();
+                // SUCCESS: User said Lanadev is "Baik"
+                handle.style.transform = `translate(calc(-50% + ${maxDist}px), -50%)`;
+                handle.style.background = "#2ecc71";
+                handleIcon.className = "fa-solid fa-check";
+                
+                // Transition to Password Stage
+                setTimeout(() => {
+                    stageSlider.classList.add('hidden');
+                    stagePassword.classList.remove('hidden');
+                    stagePassword.classList.add('fade-in');
+                    passwordInput.focus();
+                }, 500);
+
             } else if (finalX < -threshold) {
-                // GAGAL (KIRI)
-                verifyFail();
+                // FAIL: User said "Gak"
+                handle.style.transform = `translate(-50%, -50%)`; // Snap back
+                handle.style.background = "#ff4757";
+                handleIcon.className = "fa-solid fa-xmark";
+                handleIcon.style.color = "white";
+                
+                sliderHint.innerText = "JAWABAN SALAH!";
+                sliderHint.style.color = "#ff4757";
+                
+                setTimeout(() => {
+                    resetHandle();
+                }, 1000);
+
             } else {
-                // Snap Back to Center
-                resetSlider();
+                // Not enough distance -> Reset
+                resetHandle();
             }
         }
 
-        function resetSlider() {
+        function resetHandle() {
             handle.style.transform = `translate(-50%, -50%)`;
             handle.style.background = "white";
-            container.style.background = "rgba(0, 0, 0, 0.4)";
             handleIcon.className = "fa-solid fa-arrows-left-right";
-            handleIcon.style.color = "#243b55";
+            handleIcon.style.color = "#302b63";
+            sliderHint.innerText = "Geser untuk konfirmasi";
+            sliderHint.style.color = "rgba(255,255,255,0.2)";
         }
 
-        function verifyFail() {
-            // Visual feedback for Failure
-            handle.style.transform = `translate(-50%, -50%)`; // Snap back
-            handle.style.background = "#e74c3c"; // Red
-            handleIcon.className = "fa-solid fa-xmark";
-            handleIcon.style.color = "white";
-            hintText.innerText = "Jawaban Salah! Coba lagi.";
-            hintText.classList.add('text-red-300');
-            
-            // Reset after 1 second
-            setTimeout(() => {
-                resetSlider();
-                hintText.innerText = "Geser ke jawaban yang benar";
-                hintText.classList.remove('text-red-300');
-            }, 1000);
+        initSlider();
+
+        // --- PASSWORD LOGIC ---
+        function checkPassword() {
+            const secret = "892819";
+            const val = passwordInput.value;
+
+            if (val === secret) {
+                // Password Success
+                passwordInput.blur();
+                startConfetti();
+                
+                // Transition to Download
+                stagePassword.classList.add('hidden');
+                stageDownload.classList.remove('hidden');
+                stageDownload.classList.add('fade-in');
+
+                // Auto Trigger Download Link
+                setTimeout(() => {
+                    document.getElementById('dl-btn').click();
+                }, 1000);
+
+            } else {
+                // Password Fail (Silent, just Shake)
+                passwordInput.value = ""; // Clear input
+                passwordInput.classList.add('shake');
+                
+                // Remove class so it can shake again
+                setTimeout(() => {
+                    passwordInput.classList.remove('shake');
+                    passwordInput.focus();
+                }, 500);
+            }
         }
 
-        function verifySuccess() {
-            handle.style.transform = `translate(calc(-50% + ${maxDist}px), -50%)`;
-            handle.style.background = "#2ecc71"; // Green
-            handleIcon.className = "fa-solid fa-check";
-            handleIcon.style.color = "white";
-            handle.classList.add('locked'); // Prevent dragging
-            
-            startConfetti();
+        // Allow pressing Enter for password
+        passwordInput.addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                checkPassword();
+            }
+        });
 
-            setTimeout(() => {
-                questionArea.style.display = 'none';
-                downloadArea.classList.remove('hidden');
-            }, 600);
-        }
 
-        // --- Confetti Script ---
+        // --- CONFETTI SYSTEM ---
         const canvas = document.getElementById("confetti-canvas");
         const ctx = canvas.getContext("2d");
         let particles = [];
@@ -315,15 +362,15 @@
         resizeCanvas();
 
         function startConfetti() {
-            for(let i=0; i<120; i++) {
+            for(let i=0; i<150; i++) {
                 particles.push({
-                    x: window.innerWidth / 2, // Start from center X
-                    y: window.innerHeight / 2, // Start from center Y
-                    vx: (Math.random() - 0.5) * 20,
-                    vy: (Math.random() - 0.5) * 20,
-                    color: `hsl(${Math.random() * 360}, 100%, 50%)`,
-                    size: Math.random() * 8 + 3,
-                    life: 100
+                    x: window.innerWidth / 2,
+                    y: window.innerHeight / 2,
+                    vx: (Math.random() - 0.5) * 15,
+                    vy: (Math.random() - 0.5) * 15,
+                    color: `hsl(${Math.random() * 360}, 100%, 70%)`,
+                    size: Math.random() * 6 + 2,
+                    life: 150
                 });
             }
             animateConfetti();
@@ -335,22 +382,17 @@
                 let p = particles[i];
                 p.x += p.vx;
                 p.y += p.vy;
-                p.vy += 0.5; // Gravity
-                p.vx *= 0.95; // Friction
-                p.vy *= 0.95;
+                p.vy += 0.2; 
                 p.life--;
-                p.size *= 0.97;
+                p.size *= 0.98;
 
                 ctx.fillStyle = p.color;
                 ctx.beginPath();
                 ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
                 ctx.fill();
 
-                if (p.life <= 0 || p.size < 0.5) {
-                    particles.splice(i, 1);
-                }
+                if (p.life <= 0) particles.splice(i, 1);
             }
-
             if(particles.length > 0) requestAnimationFrame(animateConfetti);
         }
     </script>
